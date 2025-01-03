@@ -1,7 +1,7 @@
 import yfinance as yf
 import pandas as pd
 
-def read_yfinance_crypto_data(ticker_name, period, interval):
+def read_yfinance_crypto_data(ticker_name, period, interval=None):
     try:
         # Read the CSV file
         ticker = yf.Ticker(ticker_name)
