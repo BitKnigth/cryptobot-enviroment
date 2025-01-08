@@ -53,8 +53,15 @@ def prepare_data(normalized_data, data, time, seq_len):
     # Function to prepare data for LSTM
     X, y = [], []
     for i in range(len(normalized_data) - seq_len):
+        X.append(normalized_data[i:i+seq_len])
+        y.append(data[i+seq_len])
+    return np.array(X), np.array(y).reshape(-1, 1), data[:-seq_len], time[:-seq_len]
+
+def prepare_ewt_data(normalized_data, data, time, seq_len):
+    # Function to prepare data for LSTM
+    X, y = [], []
+    for i in range(len(normalized_data) - seq_len):
         ewt, mfb, boundaries = ewtpy.EWT1D(normalized_data[i:i+seq_len].flatten(), N=13)
-        print(ewt.shape)
         X.append(ewt)
         y.append(data[i+seq_len])
     return np.array(X), np.array(y).reshape(-1, 1), data[:-seq_len], time[:-seq_len]
