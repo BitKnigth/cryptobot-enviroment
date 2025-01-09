@@ -8,7 +8,7 @@ def read_yfinance_crypto_data(ticker_name, period, interval=None):
         df = ticker.history(period, interval)
 
         # Clean columns
-        return df.loc[:, ~df.columns.isin(["Volume", "Dividends", "Stock Splits"])]
+        return df.loc[:, ~df.columns.isin(["Dividends", "Stock Splits"])]
     
     except FileNotFoundError:
         print("Error: The specified CSV file was not found.")
