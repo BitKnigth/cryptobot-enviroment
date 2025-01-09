@@ -11,33 +11,45 @@ def split_data_set(data, cuttoff_proportion):
 
     return [train_data, test_data]
 
-def pre_process_data(data, scaler, cuttoff=0.3):
+def pre_process_data(data, data_scaler, volume_scaler, cuttoff=0.3):
 
-    normalized_data = scaler.fit_transform(data["Close"].values.reshape(-1, 1))
+    normalized_data = data_scaler.fit_transform(data["Close"].values.reshape(-1, 1))
+    normalized_volume = volume_scaler.fit_transform(data["Volume"].values.reshape(-1, 1))
+
+    # Combina as colunas normalizadas em um único array
+    normalized_combined = np.hstack((normalized_data, normalized_volume))
+
     timeseries = data.index
+
     [
         train_set,
         test_set
-    ] = split_data_set(data, timeseries, cuttoff)
+    ] = split_data_set(normalized_combined, timeseries, cuttoff)
 
     return [
         train_set,
         test_set
     ]
 
-def pre_process_ewt_data(data, scaler, cuttoff=0.3):
-    normalized_data = scaler.fit_transform(data["Close"].values.reshape(-1, 1))
+def pre_process_ewt_data(data, data_scaler, volume_scaler, cuttoff=0.3):
+    
+    normalized_data = data_scaler.fit_transform(data["Close"].values.reshape(-1, 1))
+    normalized_volume = volume_scaler.fit_transform(data["Volume"].values.reshape(-1, 1))
+
+    # Combina as colunas normalizadas em um único array
+    normalized_combined = np.hstack((normalized_data, normalized_volume))
+
     timeseries = data.index
 
     [
         train_data,
         test_data
-    ] = split_data_set(data["Close"].values.reshape(-1, 1), cuttoff)
+    ] = split_data_set(data["Close"].values.reshape(-1,1), cuttoff)
     
     [
         train_normal,
         test_normal
-    ] = split_data_set(normalized_data, cuttoff)
+    ] = split_data_set(normalized_combined, cuttoff)
 
     [
         train_timeseries,
