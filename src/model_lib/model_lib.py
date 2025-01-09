@@ -1,7 +1,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input, Dropout
-
-def model_builder(units, dropout_rate, dense_units, shape):
+from tensorflow.keras.optimizers import Adam
+def model_builder(units, dropout_rate, dense_units, learing_rate, shape):
     model = Sequential([
         Input(shape),
         LSTM(units, return_sequences=True),
@@ -10,7 +10,8 @@ def model_builder(units, dropout_rate, dense_units, shape):
         Dense(dense_units),
         Dense(1)
     ])
-    model.compile(optimizer='adam', loss='mse')
+    optimizer = Adam(learing_rate=learing_rate)
+    model.compile(optimizer=optimizer,  loss='mse')
     
     return model
 
@@ -30,12 +31,12 @@ def optimize_hyperparameters(model_builder, X_train, y_train, X_val, y_val, optu
     """
     def objective(trial):
         # Sugerir hiperparâmetros a serem otimizados
-        units = trial.suggest_int("units", 32, 128, 256)  # Neurônios por camada
-        dropout_rate = trial.suggest_float("dropout_rate", 0.1, 0.3, 0.5)  # Taxa de Dropout
-        dense_units = trial.suggest_int("dense_units", 8, 16, 64)  # Neurônios na camada densa
-        
+        units = trial.suggest_int("units", 32, 256)  # Neurônios por camada
+        dropout_rate = trial.suggest_float("dropout_rate", 0.1, 0.5)  # Taxa de Dropout
+        dense_units = trial.suggest_int("dense_units", 8, 64)  # Neurônios na camada densa
+        learning_rate = trial.suggest_float("learning_rate", 1e-4, 1e-2, log=True)
         # Construir o modelo usando a função fornecida
-        model = model_builder(units, dropout_rate, dense_units)
+        model = model_builder(units, dropout_rate, dense_units, learning_rate, X_train[0].shape)
         
         # Treinar o modelo
         history = model.fit(
