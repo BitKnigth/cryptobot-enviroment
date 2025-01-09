@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 import json
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 import os
-from src import prepare_data
+from .. import prepare_data
+
 def prepare_data_and_predict(model, prepare_data_function, normalized_test_data, test_data, test_date_series, seq_len):
     """
     Prepara os dados de teste e realiza previsões no conjunto de teste.
