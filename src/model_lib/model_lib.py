@@ -1,6 +1,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input, Dropout
 from tensorflow.keras.optimizers import Adam
+
 def model_builder(units, dropout_rate, dense_units, learing_rate, shape):
     model = Sequential([
         Input(shape),
