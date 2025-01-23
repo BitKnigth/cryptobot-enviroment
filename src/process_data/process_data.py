@@ -1,7 +1,6 @@
 
 import numpy as np
 import ewtpy
-
 def split_data_set(data, cuttoff_proportion):
     dataCutoff = int(len(data) * cuttoff_proportion)
     print("Cutoff: ", dataCutoff)
