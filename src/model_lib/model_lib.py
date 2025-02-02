@@ -2,7 +2,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input, Dropout
 from tensorflow.keras.optimizers import Adam
 
-def model_builder(units, dropout_rate, dense_units, learing_rate, shape):
+def model_builder(units, dropout_rate, dense_units, learning_rate, shape):
     model = Sequential([
         Input(shape),
         LSTM(units, return_sequences=True),
@@ -11,7 +11,7 @@ def model_builder(units, dropout_rate, dense_units, learing_rate, shape):
         Dense(dense_units),
         Dense(1)
     ])
-    optimizer = Adam(learing_rate=learing_rate)
+    optimizer = Adam(learning_rate=learning_rate)
     model.compile(optimizer=optimizer,  loss='mse')
     
     return model
@@ -42,10 +42,10 @@ def optimize_hyperparameters(model_builder, X_train, y_train, X_val, y_val, optu
         # Treinar o modelo
         history = model.fit(
             X_train, y_train,
-            validation_data=(X_val, y_val),
-            batch_size=trial.suggest_categorical("batch_size", [16, 32, 64]),
-            epochs=trial.suggest_int("epochs", 10, 50, 100, 150),
-            verbose=1
+                validation_data=(X_val, y_val),
+                batch_size=trial.suggest_categorical("batch_size", [16, 64]),
+                epochs=trial.suggest_int("epochs", 50, 150),
+                verbose=1
         )
         
         # Retornar a métrica de validação (por exemplo, perda)
