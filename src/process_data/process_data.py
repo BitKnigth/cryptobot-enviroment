@@ -1,6 +1,7 @@
 
 import numpy as np
 import ewtpy
+
 def split_data_set(data, cuttoff_proportion):
     dataCutoff = int(len(data) * cuttoff_proportion)
     print("Cutoff: ", dataCutoff)
@@ -28,6 +29,38 @@ def pre_process_data(data, data_scaler, volume_scaler, cuttoff=0.3):
     return [
         train_set,
         test_set
+    ]
+
+def pre_process_data_multidim(data_series, data_scaler, cuttoff=0.3):
+
+    reshaped_series = [serie.values.reshape(-1, 1) for serie in data_series]
+    print(reshaped_series)
+    timeseries = data_series[0].index
+
+    # Combina as colunas normalizadas em um único array
+    series_combined = np.hstack(reshaped_series)
+    print(series_combined.shape)
+    normalized_data = data_scaler.fit_transform(series_combined)
+    print(normalized_data.shape)
+
+    [
+        train_data,
+        test_data
+    ] = split_data_set(series_combined, cuttoff)
+    
+    [
+        train_normal,
+        test_normal
+    ] = split_data_set(normalized_data, cuttoff)
+
+    [
+        train_timeseries,
+        test_series
+    ] = split_data_set(timeseries, cuttoff)
+
+    return [
+        [train_timeseries, train_data, train_normal],
+        [test_series, test_data, test_normal]
     ]
 
 def pre_process_ewt_data(data, data_scaler, volume_scaler, cuttoff=0.3):
@@ -59,6 +92,16 @@ def pre_process_ewt_data(data, data_scaler, volume_scaler, cuttoff=0.3):
         [train_timeseries, train_data, train_normal],
         [test_series, test_data, test_normal]
     ]
+
+def prepare_data_multidim(normalized_data, data, time, seq_len):
+    # Function to prepare data for LSTM
+    X, y = [], []
+    print(data.shape, normalized_data.shape)
+    for i in range(len(normalized_data) - seq_len):
+        X.append(normalized_data[i:i+seq_len])
+        y.append(data[i+seq_len][0])
+    return np.array(X), np.array(y).reshape(-1, 1), data[:-seq_len], time[:-seq_len]
+
 
 def prepare_data(normalized_data, data, time, seq_len):
     # Function to prepare data for LSTM

@@ -1,0 +1,25 @@
+[project]
+name = "cryptobot-enviroment"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Joshua Junker",email = "joshiklis@gmail.com"}
+]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "tensorflow (>=2.18.0,<3.0.0)",
+    "numpy (==2.0.2)",
+    "matplotlib (>=3.10.0,<4.0.0)",
+    "ipykernel (>=6.29.5,<7.0.0)",
+    "jupyterlab (>=4.3.5,<5.0.0)",
+    "scikit-learn (>=1.6.1,<2.0.0)",
+    "yfinance (>=0.2.52,<0.3.0)",
+    "ewtpy (>=0.2,<0.3)",
+    "optuna (>=4.2.0,<5.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
