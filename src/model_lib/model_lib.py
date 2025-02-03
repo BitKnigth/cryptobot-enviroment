@@ -1,6 +1,7 @@
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import LSTM, Dense, Input, Dropout
 from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.losses import BinaryCrossentropy
 
 def model_builder(units, dropout_rate, dense_units, learning_rate, shape):
     model = Sequential([
@@ -13,7 +14,19 @@ def model_builder(units, dropout_rate, dense_units, learning_rate, shape):
     ])
     optimizer = Adam(learning_rate=learning_rate)
     model.compile(optimizer=optimizer,  loss='mse')
-    
+    return model
+
+def model_builder_binary_class(units, dropout_rate, dense_units, learning_rate, shape):
+    model = Sequential([
+        Input(shape),
+        LSTM(units, return_sequences=True),
+        Dropout(dropout_rate),
+        LSTM(units),
+        Dense(dense_units),
+        Dense(1, activation='sigmoid'),
+    ])
+    optimizer = Adam(learning_rate=learning_rate)
+    model.compile(optimizer=optimizer,  loss=BinaryCrossentropy(from_logits=False))
     return model
 
 def optimize_hyperparameters(model_builder, X_train, y_train, X_val, y_val, optuna, n_trials=50):

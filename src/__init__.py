@@ -1,7 +1,7 @@
 from .read_data.read_data_lib import read_yfinance_crypto_data
-from .process_data.process_data import split_data_set, pre_process_data, prepare_data, prepare_ewt_data, pre_process_ewt_data, pre_process_data_multidim, prepare_data_multidim
+from .process_data.process_data import split_data_set, pre_process_data, prepare_data_up_down, prepare_data, prepare_ewt_data, pre_process_ewt_data, pre_process_data_multidim, prepare_data_multidim
 from .evaluate_model.evaluate_model import full_evaluation_flow, evaluate_and_save_metrics
-from .model_lib.model_lib import optimize_hyperparameters, model_builder
+from .model_lib.model_lib import optimize_hyperparameters, model_builder, model_builder_binary_class
 __all__ = [
     "read_yfinance_crypto_data",
     "split_data_set",
@@ -10,6 +10,7 @@ __all__ = [
     "pre_process_ewt_data",
     "evaluate_and_save_metrics",
     "pre_process_data_multidim",
-    "prepare_data_multidim"
+    "prepare_data_multidim",
+    "prepare_data_up_down"
 ]
 

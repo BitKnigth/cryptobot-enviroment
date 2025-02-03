@@ -103,6 +103,16 @@ def prepare_data_multidim(normalized_data, data, time, seq_len):
     return np.array(X), np.array(y).reshape(-1, 1), data[:-seq_len], time[:-seq_len]
 
 
+def prepare_data_up_down(normalized_data, data, time, seq_len):
+    # Function to prepare data for LSTM
+    X, y = [], []
+    for i in range(len(normalized_data) - seq_len):
+        X.append(normalized_data[i:i+seq_len])
+        price_diff = data[i+seq_len][0] - data[i+seq_len-1][0]
+        # Define o label: 1 para alta, 0 para baixa ou estagnação
+        y.append(1 if price_diff > 0 else 0)
+    return np.array(X), np.array(y).reshape(-1, 1), data[:-seq_len], time[:-seq_len]
+
 def prepare_data(normalized_data, data, time, seq_len):
     # Function to prepare data for LSTM
     X, y = [], []
